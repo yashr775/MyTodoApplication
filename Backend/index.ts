@@ -12,7 +12,7 @@ app.use(express.json());
 
 
 app.use('/api/user', require('./routes/user'));
-app.use('/api/todo', require('./routes/todo'));
+// app.use('/api/todo', require('./routes/todo'));
 
 
 app.listen(port, () => {
