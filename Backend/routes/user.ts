@@ -1,5 +1,6 @@
 import express,{ Router,Request,Response } from "express";
 import  jwt  from "jsonwebtoken";
+import{z} from "zod";
 
 import { PrismaClient } from '@prisma/client';
 // import authuser from '../middleware/authuser';
@@ -9,6 +10,12 @@ const router = express.Router();
 const JWT_SECRET: string | undefined = process.env.JWT_SECRET;
 const prisma = new PrismaClient();
 
+const userSchema =z.object({
+    name:z.string().min(3),
+    email:z.string().email(),
+    password:z.string(),
+})
+
 
 
 router.post('/createuser', async (req:Request,res:Response)=>{
@@ -16,6 +23,11 @@ router.post('/createuser', async (req:Request,res:Response)=>{
     let success =false
 
     const {name ,email , password} =req.body;
+
+    const userData ={name,email,password};
+
+    const validationResult = userSchema.parse(userData)
+    console.log(validationResult)
 
     try {
 
@@ -30,10 +42,7 @@ router.post('/createuser', async (req:Request,res:Response)=>{
           }else{
 
             const createdUser = await prisma.user.create({
-                data:{
-                    name,
-                    email,
-                    password
+                data:{name,email,password
                 }
             })
 

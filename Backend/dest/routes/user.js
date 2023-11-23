@@ -14,15 +14,24 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const zod_1 = require("zod");
 const client_1 = require("@prisma/client");
 // import authuser from '../middleware/authuser';
 require('dotenv').config({ path: '../.env' });
 const router = express_1.default.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 const prisma = new client_1.PrismaClient();
+const userSchema = zod_1.z.object({
+    name: zod_1.z.string().min(3),
+    email: zod_1.z.string().email(),
+    password: zod_1.z.string(),
+});
 router.post('/createuser', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     let success = false;
     const { name, email, password } = req.body;
+    const userData = { name, email, password };
+    const validationResult = userSchema.parse(userData);
+    console.log(validationResult);
     try {
         const user = yield prisma.user.findUnique({
             where: {
