@@ -1,9 +1,10 @@
 import express,{ Router,Request,Response } from "express";
 import  jwt  from "jsonwebtoken";
 import{z} from "zod";
+import { fromZodError } from "zod-validation-error";
 
 import { PrismaClient } from '@prisma/client';
-// import authuser from '../middleware/authuser';
+import authuser from '../middleware/authuser';
 require('dotenv').config({ path: '../.env' });
 
 const router = express.Router();
@@ -11,8 +12,8 @@ const JWT_SECRET: string | undefined = process.env.JWT_SECRET;
 const prisma = new PrismaClient();
 
 const createUserSchema =z.object({
-    name:z.string().min(3),
-    email:z.string().email(),
+    name:z.string().min(3,"minimum 3 characters required"),
+    email:z.string().email("wrong email format"),
     password:z.string(),
 })
 
@@ -31,7 +32,11 @@ router.post('/createuser', async (req:Request,res:Response)=>{
 
     const userData ={name,email,password};
 
-    const validationResult = createUserSchema.parse(userData)
+    const validationResult = createUserSchema.safeParse(userData)
+
+    if(!validationResult.success){
+          res.status(403).send(fromZodError(validationResult.error))
+    }
 
     try {
 
@@ -53,7 +58,7 @@ router.post('/createuser', async (req:Request,res:Response)=>{
             })
 
           const userId = createdUser.id;
-          const data = { user: { id: userId } };
+          const data = { user: {_id: userId } };
           const token = jwt.sign(data, JWT_SECRET!);
   
           if (token) success = true;
@@ -101,7 +106,7 @@ router.post("/login",async(req:Request,res:Response)=>{
 
         const userId = user?.id;
         
-        const data ={user:{id:userId}};
+        const data ={user:{_id:userId}};
 
         let token:string='';
 
@@ -122,6 +127,58 @@ router.post("/login",async(req:Request,res:Response)=>{
       }
 
 
+})
+
+router.get("/getuser", authuser, async (req,res)=>{
+    try {
+
+        console.log(req.user._id);
+
+        const userId =req.user._id;
+
+        const user = await prisma.user.findUnique({where:{id:userId}})
+
+        if(!user){
+            return res.status(400).send("User with the given id does not exist");
+        }
+
+        return res.status(200).send(user)
+        
+    } catch (error) {
+        console.log('Internal server error');
+        console.error('Internal server error :: ' + error);
+        res.status(500).send('Some error occurred');
+    }finally {
+        await prisma.$disconnect();
+      }
+})
+
+router.delete("/deleteuser",authuser,async (req,res)=>{
+
+    try {
+        console.log(req.user._id)
+
+        const userId=req.user._id;
+
+        const user =await prisma.user.findUnique({where:{id:userId}});
+    
+        if(!user){
+            return res.status(400).send("User with the given id does not exist");
+        }
+     
+        const deletedUser =await prisma.user.delete( { where: { id:userId } } );
+    
+        res.status(200).json(deletedUser)
+    
+        
+    } catch (error) {
+        console.log('Internal server error');
+        console.error('Internal server error :: ' + error);
+        res.status(500).send('Some error occurred');
+    }finally {
+        await prisma.$disconnect();
+      }
+   
 })
 
 

@@ -6,7 +6,7 @@ import { PrismaClient, User } from '@prisma/client';
 
 const JWT_SECRET:string|undefined = process.env.JWT_SECRET
 
-const authuser = (req:Request,res:Response,next:NextFunction)=>{
+ const authuser = (req:Request,res:Response,next:NextFunction)=>{
 
     const token:string|undefined = req.header("auth-token");
 
@@ -39,3 +39,5 @@ const authuser = (req:Request,res:Response,next:NextFunction)=>{
         
     }
 }
+
+export default authuser
