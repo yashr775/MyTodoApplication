@@ -129,7 +129,7 @@ router.post("/login",async(req:Request,res:Response)=>{
 
 })
 
-router.get("/getuser", authuser, async (req,res)=>{
+router.get("/getuser", authuser, async (req:Request,res:Response)=>{
     try {
 
         console.log(req.user._id);
@@ -153,7 +153,7 @@ router.get("/getuser", authuser, async (req,res)=>{
       }
 })
 
-router.delete("/deleteuser",authuser,async (req,res)=>{
+router.delete("/deleteuser",authuser,async (req:Request,res:Response)=>{
 
     try {
         console.log(req.user._id)
