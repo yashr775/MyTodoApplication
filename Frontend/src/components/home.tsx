@@ -1,6 +1,14 @@
 import Navbar from "./navbar";
 
 const home = () => {
+  const handleSignInClick = () => {
+    window.location.href = "/signin";
+  };
+
+  const handleSignUpClick = () => {
+    window.location.href = "/signup";
+  };
+
   return (
     <div>
       <Navbar></Navbar>
@@ -12,11 +20,17 @@ const home = () => {
             unbearable. Take your decision wisely. Choise is yours
           </p>
           <div>
-            <button className="bg-blue-900 rounded-2xl px-4 py-2 text-white hover:text-slate-900 hover:bg-blue-700">
+            <button
+              className="bg-blue-900 rounded-2xl px-4 py-2 text-white hover:text-slate-900 hover:bg-blue-700"
+              onClick={handleSignInClick}
+            >
               Sign In
             </button>
             <span className="mx-2"></span>
-            <button className="bg-blue-900 rounded-2xl px-4 py-2 text-white hover:text-slate-900 hover:bg-blue-700">
+            <button
+              className="bg-blue-900 rounded-2xl px-4 py-2 text-white hover:text-slate-900 hover:bg-blue-700"
+              onClick={handleSignUpClick}
+            >
               Sign Up
             </button>
           </div>
