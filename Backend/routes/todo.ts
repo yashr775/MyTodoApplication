@@ -49,7 +49,7 @@ router.post("/createtodo",authuser,async (req:Request,res:Response)=>{
     } catch (error) {
         console.log("Internal server error")
         console.error('Internal server error :: ' + error);
-        res.status(500).send('Some error occurred');
+       return res.status(500).send('Some error occurred');
     }finally{
         prisma.$disconnect();
     }

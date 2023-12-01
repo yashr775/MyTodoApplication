@@ -1,8 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import Navbar from "./navbar";
-import { useRecoilState } from "recoil";
-import { navIcon1 } from "../atoms";
 
 interface FormData {
   email: string;

@@ -11,7 +11,7 @@ const JWT_SECRET:string|undefined = process.env.JWT_SECRET
     const token:string|undefined = req.header("auth-token");
 
     if(!token){
-        res.status(404).send("Invalid token");
+       return  res.status(404).send("Invalid token");
     }
     
 
