@@ -1,10 +1,20 @@
-const navbar = () => {
+import { navIcon1 } from "../atoms";
+import { useRecoilValue } from "recoil";
+
+const Navbar = () => {
+  const loginvalue = useRecoilValue(navIcon1);
+
   const handleSignInClick = () => {
     window.location.href = "/signin";
   };
 
   const handleSignUpClick = () => {
     window.location.href = "/signup";
+  };
+
+  const handleSignOutClick = () => {
+    localStorage.removeItem("auth-token");
+    window.location.href = "/";
   };
 
   const handleHomeClick = () => {
@@ -19,27 +29,42 @@ const navbar = () => {
       >
         Home
       </div>
-      <div className="pt-4 text-2xl font-bold">My Todo</div>
+      <div className="pt-4 text-2xl font-bold absolute left-1/2 transform -translate-x-1/2">
+        My Todo
+      </div>
       <ul className="px-28 py-4 flex space-x-7 justify-end">
         <li>
-          <button
-            className="bg-blue-900 rounded-lg px-3 py-2 hover:text-slate-900 hover:bg-blue-700"
-            onClick={handleSignInClick}
-          >
-            Sign In
-          </button>
+          {loginvalue ? (
+            <button
+              className="bg-blue-900 rounded-lg px-3 py-2 hover:text-slate-900 hover:bg-blue-700"
+              onClick={handleSignOutClick}
+            >
+              Sign Out
+            </button>
+          ) : (
+            <button
+              className="bg-blue-900 rounded-lg px-3 py-2 hover:text-slate-900 hover:bg-blue-700"
+              onClick={handleSignInClick}
+            >
+              Sign In
+            </button>
+          )}
         </li>
         <li>
-          <button
-            className="bg-blue-900 rounded-lg px-3 py-2 hover:text-slate-900 hover:bg-blue-700"
-            onClick={handleSignUpClick}
-          >
-            Sign Up
-          </button>
+          {loginvalue ? (
+            ""
+          ) : (
+            <button
+              className="bg-blue-900 rounded-lg px-3 py-2 hover:text-slate-900 hover:bg-blue-700"
+              onClick={handleSignUpClick}
+            >
+              Sign Up
+            </button>
+          )}
         </li>
       </ul>
     </nav>
   );
 };
 
-export default navbar;
+export default Navbar;

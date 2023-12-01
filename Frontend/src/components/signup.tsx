@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { ChangeEvent, FormEvent, useState } from "react";
 import Navbar from "./navbar";
+import { useRecoilState } from "recoil";
+import { navIcon1 } from "../atoms";
 
 interface FormData {
   name: string;
@@ -13,6 +16,8 @@ const Signup: React.FC = () => {
     email: "",
     password: "",
   });
+
+  const [loginValue, setLoginValue] = useRecoilState(navIcon1);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -43,6 +48,8 @@ const Signup: React.FC = () => {
 
       if (json.success === true) {
         localStorage.setItem("auth-token", json.token);
+        window.location.href = "/userprofile";
+        setLoginValue(true);
       } else {
         console.log("danger Invalid details");
       }

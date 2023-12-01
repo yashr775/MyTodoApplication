@@ -96,7 +96,7 @@ router.post("/login",async(req:Request,res:Response)=>{
         
 
         if(!user) {
-            res.status(403).send("User with the given email does not exist")
+            return res.status(403).send("User with the given email does not exist")
         }
 
         if(password !== user?.password)

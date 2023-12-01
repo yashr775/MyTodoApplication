@@ -1,10 +1,6 @@
-// import {atom} from 'recoil';
+import { atom } from "recoil";
 
-// interface createUserType {
-//     name:string;
-//     email:string;
-//     password:string;
-// }
-
-// export const createUser = atom<createUserType>()
-4;
+export const navIcon1 = atom<boolean>({
+  key: "Icon1",
+  default: false,
+});

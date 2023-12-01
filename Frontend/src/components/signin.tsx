@@ -1,5 +1,8 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import Navbar from "./navbar";
+import { useRecoilState } from "recoil";
+import { navIcon1 } from "../atoms";
 
 interface FormData {
   email: string;
@@ -38,6 +41,7 @@ const Signin: React.FC = () => {
 
     if (json.success === true) {
       localStorage.setItem("auth-token", json.token);
+      window.location.href = "/userprofile";
     } else {
       console.log("Danger Invalid details");
     }
@@ -81,7 +85,10 @@ const Signin: React.FC = () => {
             required
           />{" "}
           <br />
-          <button className="flex justify-center text-lg bg-blue-800 mt-2 rounded-md pb-2 pt-2 mb-4 w-80 h-9 ml-6 text-white hover:bg-blue-950  ">
+          <button
+            className="flex justify-center text-lg bg-blue-800 mt-2 rounded-md pb-2 pt-2 mb-4 w-80 h-9 ml-6
+           text-white hover:bg-blue-950  "
+          >
             Sign In
           </button>
         </form>
