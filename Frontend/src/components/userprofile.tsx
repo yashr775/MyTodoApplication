@@ -1,7 +1,8 @@
 import { useRecoilState } from "recoil";
 import Navbar from "./navbar";
-import { navIcon1 } from "../atoms";
+import { navIcon1, TodoListState } from "../atoms";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import Usertodo from "./usertodo";
 
 interface FormData {
   title: string;
@@ -11,6 +12,7 @@ interface FormData {
 
 const Userprofile = () => {
   const [loginValue, setLoginValue] = useRecoilState(navIcon1);
+  const [todos, setTodos] = useRecoilState(TodoListState);
 
   useEffect(() => {
     setLoginValue(true);
@@ -28,6 +30,11 @@ const Userprofile = () => {
 
     setFormData((prevFormData) => ({
       ...prevFormData,
+      [name]: value,
+    }));
+
+    setTodos((prevTodoData) => ({
+      ...prevTodoData,
       [name]: value,
     }));
   };
@@ -50,12 +57,47 @@ const Userprofile = () => {
     console.log(response.json);
   };
 
+  const fetchData = async () => {
+    const response = await fetch(
+      "http://localhost:5000/api/todo/getalltodoforgivenuser",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("auth-token") ?? " ",
+        },
+      }
+    );
+
+    const data = await response.json();
+
+    const tempTodo = data.map(
+      (temp: { title: string; subject?: string; description: string }) => {
+        const obj = {
+          title: temp.title,
+          subject: temp.subject,
+          description: temp.description,
+        };
+
+        return obj;
+      }
+    );
+
+    setTodos(tempTodo);
+
+    console.log(data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
   return (
-    <div>
+    <div className="bg-pink-100">
       <Navbar></Navbar>
-      <div className="bg-pink-100   items-center h-screen ">
+      <div className="items-center h-screen flex flex-col items-center  ">
         <form
-          className="bg-white absolute top-36 left-1/2 transform -translate-x-1/2 rounded-lg w-1/5 "
+          className="bg-white rounded-lg w-1/5 mt-10  "
           onSubmit={handleSubmit}
         >
           <h1 className="flex justify-center text-xl font-bold m-4 underline underline-offset-4">
@@ -98,6 +140,16 @@ const Userprofile = () => {
             Add Todo
           </button>
         </form>
+        <br />
+        <div className="">
+          {todos.length === 0 ? (
+            <div>No Notes to display</div>
+          ) : (
+            todos.map((todo) => {
+              return <Usertodo todo={todo} />;
+            })
+          )}
+        </div>
       </div>
     </div>
   );
