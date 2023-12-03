@@ -33,10 +33,19 @@ const Userprofile = () => {
       [name]: value,
     }));
 
-    setTodos((prevTodoData) => ({
+    // setTodos((prevTodoData) => ({
+    //   ...prevTodoData,
+    //   [name]: value,
+    // }));
+
+    setTodos((prevTodoData) => [
       ...prevTodoData,
-      [name]: value,
-    }));
+      {
+        title: name === "title" ? value : formData.title,
+        subject: name === "subject" ? value : formData.subject,
+        description: name === "description" ? value : formData.description,
+      },
+    ]);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -85,7 +94,7 @@ const Userprofile = () => {
 
     setTodos(tempTodo);
 
-    console.log(data);
+    // console.log(data);
   };
 
   useEffect(() => {
@@ -141,12 +150,21 @@ const Userprofile = () => {
           </button>
         </form>
         <br />
-        <div className="">
+        <div
+          className="
+        mt-10"
+        >
           {todos.length === 0 ? (
             <div>No Notes to display</div>
           ) : (
             todos.map((todo) => {
-              return <Usertodo todo={todo} />;
+              return (
+                <Usertodo
+                  title={todo.title}
+                  subject={todo.subject}
+                  description={todo.description}
+                />
+              );
             })
           )}
         </div>
