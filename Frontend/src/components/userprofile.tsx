@@ -38,14 +38,14 @@ const Userprofile = () => {
     //   [name]: value,
     // }));
 
-    setTodos((prevTodoData) => [
-      ...prevTodoData,
-      {
-        title: name === "title" ? value : formData.title,
-        subject: name === "subject" ? value : formData.subject,
-        description: name === "description" ? value : formData.description,
-      },
-    ]);
+    // setTodos((prevTodoData) => [
+    //   ...prevTodoData,
+    //   {
+    //     title: name === "title" ? value : formData.title,
+    //     subject: name === "subject" ? value : formData.subject,
+    //     description: name === "description" ? value : formData.description,
+    //   },
+    // ]);
   };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -61,6 +61,20 @@ const Userprofile = () => {
         "auth-token": localStorage.getItem("auth-token") ?? " ",
       },
       body: JSON.stringify({ title, subject, description }),
+    });
+    setTodos((prevTodoData) => [
+      ...prevTodoData,
+      {
+        title: title,
+        subject: subject,
+        description: description,
+      },
+    ]);
+
+    setFormData({
+      title: "",
+      subject: "",
+      description: "",
     });
 
     console.log(response.json);
@@ -94,7 +108,7 @@ const Userprofile = () => {
 
     setTodos(tempTodo);
 
-    // console.log(data);
+    console.log(data);
   };
 
   useEffect(() => {
@@ -152,7 +166,7 @@ const Userprofile = () => {
         <br />
         <div
           className="
-        mt-10"
+        mt-10 grid grid-cols-4 gap-4 h-1/4 flex-content-0 "
         >
           {todos.length === 0 ? (
             <div>No Notes to display</div>
@@ -163,6 +177,7 @@ const Userprofile = () => {
                   title={todo.title}
                   subject={todo.subject}
                   description={todo.description}
+                  col-span-3
                 />
               );
             })
