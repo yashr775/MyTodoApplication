@@ -6,6 +6,7 @@ export const navIcon1 = atom<boolean>({
 });
 
 interface todolist {
+  id: number;
   title: string;
   subject?: string;
   description: string;

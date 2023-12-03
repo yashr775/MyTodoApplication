@@ -1,6 +1,8 @@
-import { useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { TodoListState } from "../atoms";
 
 interface todolist {
+  id: number;
   title: string;
   subject?: string;
   description: string;
@@ -11,13 +13,27 @@ interface todolist {
 // }
 
 const Usertodo: React.FC<todolist> = (props: todolist) => {
-  const displYprops = () => {
-    console.log(props);
+  const [todos, setTodos] = useRecoilState(TodoListState);
+
+  const handleDeleteClick = async () => {
+    try {
+      const id = props.id;
+
+      await fetch(`http://localhost:5000/api/todo/deletetodo/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "auth-token": localStorage.getItem("auth-token") ?? " ",
+        },
+      });
+
+      setTodos((todos) => todos.filter((note) => note.id != id));
+    } catch (error) {
+      console.error("An unexpected error occurred", error);
+    }
   };
 
-  useEffect(() => {
-    displYprops();
-  }, []);
+  const handleUpdateClick = () => {};
 
   return (
     <div className="bg-gray-400 rounded-lg m-4 p-4 ">
@@ -26,7 +42,7 @@ const Usertodo: React.FC<todolist> = (props: todolist) => {
         <p className="mb-2">{props.subject}</p>
         <p className="mb-2">{props.description}</p>
         <div className="flex justify-between">
-          <button className="mt-6 ">
+          <button className="mt-6 " onClick={handleDeleteClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -42,7 +58,7 @@ const Usertodo: React.FC<todolist> = (props: todolist) => {
               />
             </svg>
           </button>
-          <button className="mt-6 ">
+          <button className="mt-6 " onClick={handleUpdateClick}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

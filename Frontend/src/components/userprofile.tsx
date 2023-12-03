@@ -52,7 +52,6 @@ const Userprofile = () => {
     event.preventDefault();
 
     const { title, subject, description } = formData;
-    console.log(localStorage.getItem("token"));
 
     const response = await fetch("http://localhost:5000/api/todo/createtodo", {
       method: "POST",
@@ -62,9 +61,15 @@ const Userprofile = () => {
       },
       body: JSON.stringify({ title, subject, description }),
     });
+
+    const responseData = await response.json();
+
+    console.log(responseData.id);
+
     setTodos((prevTodoData) => [
       ...prevTodoData,
       {
+        id: responseData.id,
         title: title,
         subject: subject,
         description: description,
@@ -76,8 +81,6 @@ const Userprofile = () => {
       subject: "",
       description: "",
     });
-
-    console.log(response.json);
   };
 
   const fetchData = async () => {
@@ -95,8 +98,14 @@ const Userprofile = () => {
     const data = await response.json();
 
     const tempTodo = data.map(
-      (temp: { title: string; subject?: string; description: string }) => {
+      (temp: {
+        id: number;
+        title: string;
+        subject?: string;
+        description: string;
+      }) => {
         const obj = {
+          id: temp.id,
           title: temp.title,
           subject: temp.subject,
           description: temp.description,
@@ -107,8 +116,6 @@ const Userprofile = () => {
     );
 
     setTodos(tempTodo);
-
-    console.log(data);
   };
 
   useEffect(() => {
@@ -116,9 +123,9 @@ const Userprofile = () => {
   }, []);
 
   return (
-    <div className="bg-pink-100">
+    <div className="bg-pink-100 h-full w-screen">
       <Navbar></Navbar>
-      <div className="items-center h-screen flex flex-col items-center  ">
+      <div className="items-center h-screen flex flex-col  ">
         <form
           className="bg-white rounded-lg w-1/5 mt-10  "
           onSubmit={handleSubmit}
@@ -174,6 +181,7 @@ const Userprofile = () => {
             todos.map((todo) => {
               return (
                 <Usertodo
+                  id={todo.id}
                   title={todo.title}
                   subject={todo.subject}
                   description={todo.description}

@@ -65,7 +65,7 @@ router.get("/gettodobyid/:id", async (req:Request,res:Response) => {
         const todo = await prisma.todo.findUnique({where:{id:todoId}})
 
         if(todo == null){
-            res.status(200).send("todo with the given id does not exist");
+          return  res.status(200).send("todo with the given id does not exist");
         }
 
         return res.status(200).json(todo);
@@ -148,14 +148,14 @@ router.delete("/deletetodo/:id", async (req:Request,res:Response) => {
     try {
         const todoId = parseInt(req.params.id)
 
-    const todo = await prisma.user.findUnique({where:{id:todoId}});
+    const todo = await prisma.todo.findUnique({where:{id:todoId}});
 
     if(!todo){
-        res.status(403).send("Todo with given id does not exist");
+      return  res.status(403).send("Todo with given id does not exist");
     }
 
     const deletedTodo =await prisma.todo.delete({where:{id:todoId}})
-    res.status(200).json(deletedTodo);
+    return res.status(200).json(deletedTodo);
     } catch (error) {
         console.log("Internal server error")
         console.error('Internal server error :: ' + error);
