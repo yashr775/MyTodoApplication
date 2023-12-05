@@ -21,3 +21,19 @@ UserProfile Page
 Update Model
 
 ![Screenshot 2023-12-05 202326](https://github.com/yashr775/MyTodoApplication/assets/151505210/6040f8da-d821-4c85-8316-cbd20b7feb6a)
+
+How to run this locally
+
+Inorder to run this project locally you need to have node installed in your system. Since this entire project has been developed using typescript you also need to install typescript.
+
+First clone this project locally than run npm install in frontend and backend separately.
+
+Create your .env file and put your db url and jwt secret in it.
+
+Run tsc in backend to generate dest folder where it contains all javascript files.
+
+Navigate to dest and run node index.js the backend is up and running.
+
+run npm run dev the front end is also ready to go.
+
+
