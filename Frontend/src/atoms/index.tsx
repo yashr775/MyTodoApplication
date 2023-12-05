@@ -16,3 +16,18 @@ export const TodoListState = atom<todolist[]>({
   key: "todoValue",
   default: [],
 });
+
+export const updateModelHandler = atom<boolean>({
+  key: "updateValue",
+  default: false,
+});
+
+export const setTodoToUpdate = atom<todolist>({
+  key: "propValue",
+  default: {
+    id: 0,
+    title: "",
+    subject: "",
+    description: "",
+  },
+});
