@@ -1,6 +1,6 @@
 # My Todo Application
 
-This Project has been created using React , Tailwindcss , heroicons , Typescript and recoil for front end. Nodejs has been Used for backend prisma as ORM tool and postgres as database.
+This Project has been created using React , Tailwindcss , heroicons , Typescript and recoil for front end. Nodejs and Typescript has been Used for backend prisma as ORM tool zod for input validation and postgres as database.
 
 <h1>Home Page<h1>
 
